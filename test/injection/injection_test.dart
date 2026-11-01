@@ -4,7 +4,9 @@ import 'package:dummy_shop/data/network/auth_interceptor.dart';
 import 'package:dummy_shop/data/network/dio_names.dart';
 import 'package:dummy_shop/data/network/token_refresh_interceptor.dart';
 import 'package:dummy_shop/data/repositories/auth_repository_impl.dart';
+import 'package:dummy_shop/data/repositories/product_repository_impl.dart';
 import 'package:dummy_shop/domain/repositories/auth_repository.dart';
+import 'package:dummy_shop/domain/repositories/product_repository.dart';
 import 'package:dummy_shop/domain/use_cases/login_use_case.dart';
 import 'package:dummy_shop/injection/injection.dart';
 import 'package:dummy_shop/presentation/app/router/app_router.dart';
@@ -27,6 +29,10 @@ void main() {
   test('binds AuthRepository to its implementation, as a singleton', () {
     expect(getIt<AuthRepository>(), isA<AuthRepositoryImpl>());
     expect(getIt<AuthRepository>(), same(getIt<AuthRepository>()));
+  });
+
+  test('binds ProductRepository to its implementation', () {
+    expect(getIt<ProductRepository>(), isA<ProductRepositoryImpl>());
   });
 
   test('creates a new use case on every lookup', () {

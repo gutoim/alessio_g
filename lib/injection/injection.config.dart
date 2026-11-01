@@ -16,11 +16,19 @@ import 'package:dummy_shop/data/network/token_refresh_interceptor.dart'
     as _i824;
 import 'package:dummy_shop/data/repositories/auth_repository_impl.dart'
     as _i694;
+import 'package:dummy_shop/data/repositories/product_repository_impl.dart'
+    as _i652;
 import 'package:dummy_shop/data/sources/local/auth_status_source.dart' as _i159;
 import 'package:dummy_shop/data/sources/local/token_storage.dart' as _i363;
 import 'package:dummy_shop/data/sources/remote/auth_api.dart' as _i180;
+import 'package:dummy_shop/data/sources/remote/product_api.dart' as _i217;
 import 'package:dummy_shop/data/sources/remote/token_refresh_api.dart' as _i818;
 import 'package:dummy_shop/domain/repositories/auth_repository.dart' as _i245;
+import 'package:dummy_shop/domain/repositories/product_repository.dart'
+    as _i610;
+import 'package:dummy_shop/domain/use_cases/get_product_use_case.dart' as _i430;
+import 'package:dummy_shop/domain/use_cases/get_products_use_case.dart'
+    as _i586;
 import 'package:dummy_shop/domain/use_cases/login_use_case.dart' as _i760;
 import 'package:dummy_shop/domain/use_cases/logout_use_case.dart' as _i362;
 import 'package:dummy_shop/domain/use_cases/watch_auth_status_use_case.dart'
@@ -79,12 +87,22 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.lazySingleton<_i180.AuthApi>(() => _i180.AuthApi(gh<_i361.Dio>()));
+    gh.lazySingleton<_i217.ProductApi>(() => _i217.ProductApi(gh<_i361.Dio>()));
+    gh.lazySingleton<_i610.ProductRepository>(
+      () => _i652.ProductRepositoryImpl(gh<_i217.ProductApi>()),
+    );
     gh.lazySingleton<_i245.AuthRepository>(
       () => _i694.AuthRepositoryImpl(
         gh<_i180.AuthApi>(),
         gh<_i363.TokenStorage>(),
         gh<_i159.AuthStatusSource>(),
       ),
+    );
+    gh.factory<_i430.GetProductUseCase>(
+      () => _i430.GetProductUseCase(gh<_i610.ProductRepository>()),
+    );
+    gh.factory<_i586.GetProductsUseCase>(
+      () => _i586.GetProductsUseCase(gh<_i610.ProductRepository>()),
     );
     gh.factory<_i760.LoginUseCase>(
       () => _i760.LoginUseCase(gh<_i245.AuthRepository>()),
