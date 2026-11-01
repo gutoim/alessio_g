@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dummy_shop/data/network/api_config.dart';
+import 'package:dummy_shop/data/network/auth_interceptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
@@ -7,7 +8,7 @@ import 'package:injectable/injectable.dart';
 @module
 abstract class NetworkModule {
   @lazySingleton
-  Dio dio() {
+  Dio dio(AuthInterceptor authInterceptor) {
     final dio = Dio(
       BaseOptions(
         baseUrl: ApiConfig.baseUrl,
@@ -15,6 +16,8 @@ abstract class NetworkModule {
         receiveTimeout: ApiConfig.receiveTimeout,
       ),
     );
+
+    dio.interceptors.add(authInterceptor);
 
     if (kDebugMode) {
       dio.interceptors.add(

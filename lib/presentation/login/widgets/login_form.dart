@@ -28,7 +28,7 @@ class LoginForm extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextField(
-                enabled: !state.isSubmitting,
+                enabled: !state.isBusy,
                 autocorrect: false,
                 enableSuggestions: false,
                 autofillHints: const [AutofillHints.username],
@@ -45,7 +45,7 @@ class LoginForm extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.md),
               PasswordField(
-                enabled: !state.isSubmitting,
+                enabled: !state.isBusy,
                 errorText: state.showPasswordError
                     ? l10n.loginPasswordRequired
                     : null,
@@ -59,8 +59,8 @@ class LoginForm extends StatelessWidget {
               ],
               const SizedBox(height: AppSpacing.lg),
               FilledButton(
-                onPressed: state.isSubmitting ? null : submit,
-                child: state.isSubmitting
+                onPressed: state.isBusy ? null : submit,
+                child: state.isBusy
                     ? Semantics(
                         label: l10n.loginInProgress,
                         child: const SizedBox.square(

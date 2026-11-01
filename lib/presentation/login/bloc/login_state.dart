@@ -23,6 +23,11 @@ abstract class LoginState with _$LoginState {
 
   bool get isSubmitting => status == LoginStatus.submitting;
 
+  /// The form stays disabled after a successful login until the router has
+  /// left the screen, so it does not flash back to editable.
+  bool get isBusy =>
+      status == LoginStatus.submitting || status == LoginStatus.success;
+
   bool get isValid => username.trim().isNotEmpty && password.isNotEmpty;
 
   bool get showUsernameError => showValidationErrors && username.trim().isEmpty;

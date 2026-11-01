@@ -39,6 +39,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginInProgress => 'Logging in';
 
   @override
+  String get logoutTooltip => 'Log out';
+
+  @override
   String get productsTitle => 'Products';
 
   @override

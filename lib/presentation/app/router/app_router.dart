@@ -1,9 +1,13 @@
 import 'package:dummy_shop/injection/injection.dart';
 import 'package:dummy_shop/presentation/app/router/app_routes.dart';
+import 'package:dummy_shop/presentation/app/router/auth_guard.dart';
+import 'package:dummy_shop/presentation/app/router/stream_listenable.dart';
 import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart';
 import 'package:dummy_shop/presentation/login/pages/login_page.dart';
 import 'package:dummy_shop/presentation/product_detail/pages/product_detail_page.dart';
 import 'package:dummy_shop/presentation/products/pages/products_page.dart';
+import 'package:dummy_shop/presentation/session/bloc/session_bloc.dart';
+import 'package:dummy_shop/presentation/splash/pages/splash_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
@@ -11,42 +15,61 @@ import 'package:injectable/injectable.dart';
 /// Owns the app's single [GoRouter].
 ///
 /// It is a singleton so the navigation stack survives widget rebuilds.
-/// The auth redirect guard is added together with session handling.
+/// Every navigation goes through [authRedirect], which follows the
+/// [SessionBloc]. Screens never navigate after login or logout themselves.
 ///
 /// Route builders are the composition points for screens: each one creates
 /// the screen's BLoC from [getIt], so pages never touch the service locator.
-@singleton
+@lazySingleton
 class AppRouter {
-  final GoRouter config = GoRouter(
-    initialLocation: AppRoutes.login,
-    routes: [
-      GoRoute(
-        path: AppRoutes.login,
-        builder: (context, state) => BlocProvider(
-          create: (_) => getIt<LoginBloc>(),
-          child: const LoginPage(),
+  AppRouter(SessionBloc session) : _refresh = StreamListenable(session.stream) {
+    config = GoRouter(
+      initialLocation: AppRoutes.splash,
+      refreshListenable: _refresh,
+      redirect: (context, state) =>
+          authRedirect(session.state.status, state.matchedLocation),
+      routes: [
+        GoRoute(
+          path: AppRoutes.splash,
+          builder: (context, state) => const SplashPage(),
         ),
-      ),
-      GoRoute(
-        path: AppRoutes.products,
-        builder: (context, state) => const ProductsPage(),
-        routes: [
-          GoRoute(
-            path: ':$_productIdParam',
-            // A malformed id in a deep link goes back to the list instead of
-            // failing in the detail page.
-            redirect: (context, state) =>
-                _productId(state) == null ? AppRoutes.products : null,
-            builder: (context, state) =>
-                ProductDetailPage(productId: _productId(state)!),
+        GoRoute(
+          path: AppRoutes.login,
+          builder: (context, state) => BlocProvider(
+            create: (_) => getIt<LoginBloc>(),
+            child: const LoginPage(),
           ),
-        ],
-      ),
-    ],
-  );
+        ),
+        GoRoute(
+          path: AppRoutes.products,
+          builder: (context, state) => const ProductsPage(),
+          routes: [
+            GoRoute(
+              path: ':$_productIdParam',
+              // A malformed id in a deep link goes back to the list instead of
+              // failing in the detail page.
+              redirect: (context, state) =>
+                  _productId(state) == null ? AppRoutes.products : null,
+              builder: (context, state) =>
+                  ProductDetailPage(productId: _productId(state)!),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  final StreamListenable _refresh;
+  late final GoRouter config;
 
   static const String _productIdParam = 'id';
 
   static int? _productId(GoRouterState state) =>
       int.tryParse(state.pathParameters[_productIdParam] ?? '');
+
+  @disposeMethod
+  void dispose() {
+    config.dispose();
+    _refresh.dispose();
+  }
 }

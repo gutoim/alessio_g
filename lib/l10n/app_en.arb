@@ -40,6 +40,10 @@
   "@loginInProgress": {
     "description": "Screen reader label of the login button while the request is running."
   },
+  "logoutTooltip": "Log out",
+  "@logoutTooltip": {
+    "description": "Tooltip of the log out button in the app bar."
+  },
   "productsTitle": "Products",
   "@productsTitle": {
     "description": "App bar title of the product list screen."

@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:dummy_shop/data/network/api_config.dart';
+import 'package:dummy_shop/data/network/auth_interceptor.dart';
 import 'package:dummy_shop/data/repositories/auth_repository_impl.dart';
 import 'package:dummy_shop/domain/repositories/auth_repository.dart';
 import 'package:dummy_shop/domain/use_cases/login_use_case.dart';
 import 'package:dummy_shop/injection/injection.dart';
 import 'package:dummy_shop/presentation/app/router/app_router.dart';
 import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart';
+import 'package:dummy_shop/presentation/session/bloc/session_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -14,6 +16,10 @@ void main() {
 
   test('registers AppRouter as a singleton', () {
     expect(getIt<AppRouter>(), same(getIt<AppRouter>()));
+  });
+
+  test('shares one SessionBloc between the app and the router', () {
+    expect(getIt<SessionBloc>(), same(getIt<SessionBloc>()));
   });
 
   test('binds AuthRepository to its implementation, as a singleton', () {
@@ -41,6 +47,13 @@ void main() {
       expect(dio.options.baseUrl, 'https://dummyjson.com');
       expect(dio.options.connectTimeout, ApiConfig.connectTimeout);
       expect(dio.options.receiveTimeout, ApiConfig.receiveTimeout);
+    });
+
+    test('adds the access token to requests', () {
+      expect(
+        getIt<Dio>().interceptors.whereType<AuthInterceptor>(),
+        hasLength(1),
+      );
     });
 
     test('debug logging never prints headers or bodies', () {

@@ -154,6 +154,12 @@ abstract class AppLocalizations {
   /// **'Logging in'**
   String get loginInProgress;
 
+  /// Tooltip of the log out button in the app bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get logoutTooltip;
+
   /// App bar title of the product list screen.
   ///
   /// In en, this message translates to:

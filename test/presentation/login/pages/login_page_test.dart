@@ -4,13 +4,11 @@ import 'package:dummy_shop/domain/core/failure.dart';
 import 'package:dummy_shop/domain/core/result.dart';
 import 'package:dummy_shop/domain/entities/user.dart';
 import 'package:dummy_shop/l10n/l10n.dart';
-import 'package:dummy_shop/presentation/app/router/app_routes.dart';
 import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart';
 import 'package:dummy_shop/presentation/login/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/fixtures.dart';
@@ -25,36 +23,21 @@ void main() {
 
   setUp(() => login = MockLoginUseCase());
 
-  /// Pumps the real [LoginBloc] (with a mocked use case) inside a router that
-  /// has a stand-in products page, so navigation after login is visible.
+  /// Pumps the real [LoginBloc] with a mocked use case. Navigation after a
+  /// successful login belongs to the router and is covered in `app_test`.
   ///
   /// The bloc is created by a [BlocProvider], like in the app, so the widget
   /// tree closes it. Awaiting `bloc.close()` inside `testWidgets` never
   /// completes because of the fake clock.
   Future<void> pumpLoginPage(WidgetTester tester) async {
-    final router = GoRouter(
-      initialLocation: AppRoutes.login,
-      routes: [
-        GoRoute(
-          path: AppRoutes.login,
-          builder: (_, _) => BlocProvider(
-            create: (_) => LoginBloc(login),
-            child: const LoginPage(),
-          ),
-        ),
-        GoRoute(
-          path: AppRoutes.products,
-          builder: (_, _) => const Text('products page'),
-        ),
-      ],
-    );
-    addTearDown(router.dispose);
-
     await tester.pumpWidget(
-      MaterialApp.router(
+      MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        routerConfig: router,
+        home: BlocProvider(
+          create: (_) => LoginBloc(login),
+          child: const LoginPage(),
+        ),
       ),
     );
     await tester.pumpAndSettle();
@@ -82,7 +65,7 @@ void main() {
     verifyNever(() => anyLogin(login));
   });
 
-  testWidgets('logs in with the trimmed username and opens the products page', (
+  testWidgets('logs in with the trimmed username and stays busy afterwards', (
     tester,
   ) async {
     when(
@@ -92,10 +75,14 @@ void main() {
 
     await enterCredentials(tester, username: '  emilys ');
     await tester.tap(loginButton);
-    await tester.pumpAndSettle();
+    // `pump`, not `pumpAndSettle`: the spinner keeps animating until the
+    // router leaves the screen.
+    await tester.pump();
+    await tester.pump();
 
     verify(() => login(username: 'emilys', password: 'emilyspass')).called(1);
-    expect(find.text('products page'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(tester.widget<FilledButton>(loginButton).onPressed, isNull);
   });
 
   testWidgets('submits from the keyboard "done" action', (tester) async {
@@ -106,7 +93,7 @@ void main() {
 
     await enterCredentials(tester);
     await tester.testTextInput.receiveAction(TextInputAction.done);
-    await tester.pumpAndSettle();
+    await tester.pump();
 
     verify(() => anyLogin(login)).called(1);
   });
@@ -147,7 +134,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Wrong username or password.'), findsOneWidget);
-    expect(find.text('products page'), findsNothing);
   });
 
   testWidgets('hides the error message once a field is edited', (tester) async {
