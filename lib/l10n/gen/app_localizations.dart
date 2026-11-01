@@ -99,6 +99,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'DummyJSON Shop'**
   String get appTitle;
+
+  /// App bar title of the login screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get loginTitle;
+
+  /// Primary button on the login screen that submits the credentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get loginButton;
+
+  /// App bar title of the product list screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Products'**
+  String get productsTitle;
+
+  /// App bar title of the product detail screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Product details'**
+  String get productDetailTitle;
 }
 
 class _AppLocalizationsDelegate

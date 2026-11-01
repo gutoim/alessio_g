@@ -5,7 +5,7 @@
     <!-- allowBackup=false: restoring flutter_secure_storage data from a backup on another
          device fails with "InvalidKeyException: Failed to unwrap key" (see package README). -->
     <application
-        android:label="dummy_shop"
+        android:label="DummyJSON Shop"
         android:allowBackup="false"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

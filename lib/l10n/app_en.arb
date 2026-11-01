@@ -3,5 +3,21 @@
   "appTitle": "DummyJSON Shop",
   "@appTitle": {
     "description": "Application title shown in the task switcher and app bar."
+  },
+  "loginTitle": "Sign in",
+  "@loginTitle": {
+    "description": "App bar title of the login screen."
+  },
+  "loginButton": "Log in",
+  "@loginButton": {
+    "description": "Primary button on the login screen that submits the credentials."
+  },
+  "productsTitle": "Products",
+  "@productsTitle": {
+    "description": "App bar title of the product list screen."
+  },
+  "productDetailTitle": "Product details",
+  "@productDetailTitle": {
+    "description": "App bar title of the product detail screen."
   }
 }

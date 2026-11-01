@@ -10,4 +10,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appTitle => 'DummyJSON Shop';
+
+  @override
+  String get loginTitle => 'Sign in';
+
+  @override
+  String get loginButton => 'Log in';
+
+  @override
+  String get productsTitle => 'Products';
+
+  @override
+  String get productDetailTitle => 'Product details';
 }
