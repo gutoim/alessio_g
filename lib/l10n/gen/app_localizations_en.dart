@@ -51,6 +51,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productsEmptyMessage => 'Pull down to check again.';
 
   @override
+  String productsEndOfList(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'That\'s all $count products',
+      one: 'That\'s the only product',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get retryButton => 'Try again';
 
   @override

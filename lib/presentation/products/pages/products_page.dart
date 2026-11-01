@@ -54,12 +54,26 @@ class ProductsPage extends StatelessWidget {
               const ProductsEvent.loadRequested(),
             ),
           ),
-          ProductsLoaded(:final products) => RefreshIndicator(
-            onRefresh: () => _refresh(context.read<ProductsBloc>()),
-            child: products.isEmpty
-                ? const ProductsEmptyView()
-                : ProductList(products: products),
-          ),
+          ProductsLoaded(
+            :final products,
+            :final hasMore,
+            :final isLoadingMore,
+            :final loadMoreFailure,
+          ) =>
+            RefreshIndicator(
+              onRefresh: () => _refresh(context.read<ProductsBloc>()),
+              child: products.isEmpty
+                  ? const ProductsEmptyView()
+                  : ProductList(
+                      products: products,
+                      hasMore: hasMore,
+                      isLoadingMore: isLoadingMore,
+                      loadMoreFailure: loadMoreFailure,
+                      onLoadMore: () => context.read<ProductsBloc>().add(
+                        const ProductsEvent.nextPageRequested(),
+                      ),
+                    ),
+            ),
         },
       ),
     );

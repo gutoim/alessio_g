@@ -9,4 +9,8 @@ sealed class ProductsEvent with _$ProductsEvent {
 
   /// Pull-to-refresh: reloads the first page while the list stays visible.
   const factory ProductsEvent.refreshRequested() = ProductsRefreshRequested;
+
+  /// The user scrolled near the end of the list, or tapped retry after
+  /// loading more failed.
+  const factory ProductsEvent.nextPageRequested() = ProductsNextPageRequested;
 }

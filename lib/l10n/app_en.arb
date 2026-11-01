@@ -56,6 +56,13 @@
   "@productsEmptyMessage": {
     "description": "Hint under the empty state title of the product list."
   },
+  "productsEndOfList": "{count, plural, =1{That's the only product} other{That's all {count} products}}",
+  "@productsEndOfList": {
+    "description": "Shown under the last product once the whole catalog is loaded.",
+    "placeholders": {
+      "count": {"type": "int", "example": "194"}
+    }
+  },
   "retryButton": "Try again",
   "@retryButton": {
     "description": "Button that repeats a request that failed."

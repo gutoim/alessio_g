@@ -122,12 +122,12 @@ return loaded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( Failure failure)?  failure,TResult Function( List<Product> products,  bool hasMore,  bool isRefreshing,  Failure? refreshFailure)?  loaded,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( Failure failure)?  failure,TResult Function( List<Product> products,  bool hasMore,  bool isRefreshing,  Failure? refreshFailure,  bool isLoadingMore,  Failure? loadMoreFailure)?  loaded,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ProductsLoading() when loading != null:
 return loading();case ProductsFailure() when failure != null:
 return failure(_that.failure);case ProductsLoaded() when loaded != null:
-return loaded(_that.products,_that.hasMore,_that.isRefreshing,_that.refreshFailure);case _:
+return loaded(_that.products,_that.hasMore,_that.isRefreshing,_that.refreshFailure,_that.isLoadingMore,_that.loadMoreFailure);case _:
   return orElse();
 
 }
@@ -145,12 +145,12 @@ return loaded(_that.products,_that.hasMore,_that.isRefreshing,_that.refreshFailu
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( Failure failure)  failure,required TResult Function( List<Product> products,  bool hasMore,  bool isRefreshing,  Failure? refreshFailure)  loaded,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( Failure failure)  failure,required TResult Function( List<Product> products,  bool hasMore,  bool isRefreshing,  Failure? refreshFailure,  bool isLoadingMore,  Failure? loadMoreFailure)  loaded,}) {final _that = this;
 switch (_that) {
 case ProductsLoading():
 return loading();case ProductsFailure():
 return failure(_that.failure);case ProductsLoaded():
-return loaded(_that.products,_that.hasMore,_that.isRefreshing,_that.refreshFailure);}
+return loaded(_that.products,_that.hasMore,_that.isRefreshing,_that.refreshFailure,_that.isLoadingMore,_that.loadMoreFailure);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -164,12 +164,12 @@ return loaded(_that.products,_that.hasMore,_that.isRefreshing,_that.refreshFailu
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( Failure failure)?  failure,TResult? Function( List<Product> products,  bool hasMore,  bool isRefreshing,  Failure? refreshFailure)?  loaded,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( Failure failure)?  failure,TResult? Function( List<Product> products,  bool hasMore,  bool isRefreshing,  Failure? refreshFailure,  bool isLoadingMore,  Failure? loadMoreFailure)?  loaded,}) {final _that = this;
 switch (_that) {
 case ProductsLoading() when loading != null:
 return loading();case ProductsFailure() when failure != null:
 return failure(_that.failure);case ProductsLoaded() when loaded != null:
-return loaded(_that.products,_that.hasMore,_that.isRefreshing,_that.refreshFailure);case _:
+return loaded(_that.products,_that.hasMore,_that.isRefreshing,_that.refreshFailure,_that.isLoadingMore,_that.loadMoreFailure);case _:
   return null;
 
 }
@@ -288,7 +288,7 @@ $FailureCopyWith<$Res> get failure {
 
 
 class ProductsLoaded implements ProductsState {
-  const ProductsLoaded({required final  List<Product> products, required this.hasMore, this.isRefreshing = false, this.refreshFailure}): _products = products;
+  const ProductsLoaded({required final  List<Product> products, required this.hasMore, this.isRefreshing = false, this.refreshFailure, this.isLoadingMore = false, this.loadMoreFailure}): _products = products;
   
 
  final  List<Product> _products;
@@ -304,6 +304,11 @@ class ProductsLoaded implements ProductsState {
 /// The last pull-to-refresh failed. The list is kept and the error is
 /// shown once, as a snackbar.
  final  Failure? refreshFailure;
+/// The next page is loading. Shown as a spinner at the end of the list.
+@JsonKey() final  bool isLoadingMore;
+/// Loading the next page failed. Shown at the end of the list with a
+/// retry; scrolling does not retry on its own.
+ final  Failure? loadMoreFailure;
 
 /// Create a copy of ProductsState
 /// with the given fields replaced by the non-null parameter values.
@@ -315,16 +320,16 @@ $ProductsLoadedCopyWith<ProductsLoaded> get copyWith => _$ProductsLoadedCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsLoaded&&const DeepCollectionEquality().equals(other._products, _products)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isRefreshing, isRefreshing) || other.isRefreshing == isRefreshing)&&(identical(other.refreshFailure, refreshFailure) || other.refreshFailure == refreshFailure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsLoaded&&const DeepCollectionEquality().equals(other._products, _products)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isRefreshing, isRefreshing) || other.isRefreshing == isRefreshing)&&(identical(other.refreshFailure, refreshFailure) || other.refreshFailure == refreshFailure)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.loadMoreFailure, loadMoreFailure) || other.loadMoreFailure == loadMoreFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_products),hasMore,isRefreshing,refreshFailure);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_products),hasMore,isRefreshing,refreshFailure,isLoadingMore,loadMoreFailure);
 
 @override
 String toString() {
-  return 'ProductsState.loaded(products: $products, hasMore: $hasMore, isRefreshing: $isRefreshing, refreshFailure: $refreshFailure)';
+  return 'ProductsState.loaded(products: $products, hasMore: $hasMore, isRefreshing: $isRefreshing, refreshFailure: $refreshFailure, isLoadingMore: $isLoadingMore, loadMoreFailure: $loadMoreFailure)';
 }
 
 
@@ -335,11 +340,11 @@ abstract mixin class $ProductsLoadedCopyWith<$Res> implements $ProductsStateCopy
   factory $ProductsLoadedCopyWith(ProductsLoaded value, $Res Function(ProductsLoaded) _then) = _$ProductsLoadedCopyWithImpl;
 @useResult
 $Res call({
- List<Product> products, bool hasMore, bool isRefreshing, Failure? refreshFailure
+ List<Product> products, bool hasMore, bool isRefreshing, Failure? refreshFailure, bool isLoadingMore, Failure? loadMoreFailure
 });
 
 
-$FailureCopyWith<$Res>? get refreshFailure;
+$FailureCopyWith<$Res>? get refreshFailure;$FailureCopyWith<$Res>? get loadMoreFailure;
 
 }
 /// @nodoc
@@ -352,12 +357,14 @@ class _$ProductsLoadedCopyWithImpl<$Res>
 
 /// Create a copy of ProductsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? products = null,Object? hasMore = null,Object? isRefreshing = null,Object? refreshFailure = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? products = null,Object? hasMore = null,Object? isRefreshing = null,Object? refreshFailure = freezed,Object? isLoadingMore = null,Object? loadMoreFailure = freezed,}) {
   return _then(ProductsLoaded(
 products: null == products ? _self._products : products // ignore: cast_nullable_to_non_nullable
 as List<Product>,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
 as bool,isRefreshing: null == isRefreshing ? _self.isRefreshing : isRefreshing // ignore: cast_nullable_to_non_nullable
 as bool,refreshFailure: freezed == refreshFailure ? _self.refreshFailure : refreshFailure // ignore: cast_nullable_to_non_nullable
+as Failure?,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
+as bool,loadMoreFailure: freezed == loadMoreFailure ? _self.loadMoreFailure : loadMoreFailure // ignore: cast_nullable_to_non_nullable
 as Failure?,
   ));
 }
@@ -373,6 +380,18 @@ $FailureCopyWith<$Res>? get refreshFailure {
 
   return $FailureCopyWith<$Res>(_self.refreshFailure!, (value) {
     return _then(_self.copyWith(refreshFailure: value));
+  });
+}/// Create a copy of ProductsState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FailureCopyWith<$Res>? get loadMoreFailure {
+    if (_self.loadMoreFailure == null) {
+    return null;
+  }
+
+  return $FailureCopyWith<$Res>(_self.loadMoreFailure!, (value) {
+    return _then(_self.copyWith(loadMoreFailure: value));
   });
 }
 }

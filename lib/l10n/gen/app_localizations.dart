@@ -178,6 +178,12 @@ abstract class AppLocalizations {
   /// **'Pull down to check again.'**
   String get productsEmptyMessage;
 
+  /// Shown under the last product once the whole catalog is loaded.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{That\'s the only product} other{That\'s all {count} products}}'**
+  String productsEndOfList(int count);
+
   /// Button that repeats a request that failed.
   ///
   /// In en, this message translates to:

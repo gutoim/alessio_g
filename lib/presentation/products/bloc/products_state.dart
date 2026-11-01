@@ -23,5 +23,12 @@ sealed class ProductsState with _$ProductsState {
     /// The last pull-to-refresh failed. The list is kept and the error is
     /// shown once, as a snackbar.
     Failure? refreshFailure,
+
+    /// The next page is loading. Shown as a spinner at the end of the list.
+    @Default(false) bool isLoadingMore,
+
+    /// Loading the next page failed. Shown at the end of the list with a
+    /// retry; scrolling does not retry on its own.
+    Failure? loadMoreFailure,
   }) = ProductsLoaded;
 }

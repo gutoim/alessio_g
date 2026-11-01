@@ -52,8 +52,21 @@ final otherProduct = testProduct.copyWith(
 );
 
 /// A page of [items] starting at [skip], out of a catalog of [total].
+///
+/// Without [total] the page completes the catalog (no more pages), so a
+/// test only gets pagination when it asks for it.
 PaginatedProducts productsPage(
   List<Product> items, {
   int skip = 0,
-  int total = 194,
-}) => PaginatedProducts(items: items, skip: skip, total: total);
+  int? total,
+}) => PaginatedProducts(
+  items: items,
+  skip: skip,
+  total: total ?? skip + items.length,
+);
+
+/// [count] distinct products titled `Product <id>`, ids starting at [firstId].
+List<Product> numberedProducts(int firstId, int count) => [
+  for (var id = firstId; id < firstId + count; id++)
+    testProduct.copyWith(id: id, title: 'Product $id'),
+];

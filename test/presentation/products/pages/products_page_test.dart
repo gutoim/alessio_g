@@ -191,4 +191,125 @@ void main() {
 
     expect(find.text('detail 1'), findsOneWidget);
   });
+
+  group('pagination', () {
+    void givenPage(int skip, List<Result<PaginatedProducts>> results) {
+      final queue = [...results];
+      when(
+        () => getProducts(skip: skip),
+      ).thenAnswer((_) async => queue.removeAt(0));
+    }
+
+    Future<void> scrollToEnd(WidgetTester tester) async {
+      await tester.drag(find.byType(ListView), const Offset(0, -5000));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('loads the next page when scrolling near the end', (
+      tester,
+    ) async {
+      givenPage(0, [
+        Result.ok(productsPage(numberedProducts(1, 20), total: 40)),
+      ]);
+      givenPage(20, [
+        Result.ok(productsPage(numberedProducts(21, 20), skip: 20, total: 40)),
+      ]);
+      await pumpProductsPage(tester);
+      await tester.pumpAndSettle();
+      verifyNever(() => getProducts(skip: 20));
+
+      await scrollToEnd(tester);
+      await scrollToEnd(tester);
+
+      verify(() => getProducts(skip: 20)).called(1);
+      expect(find.text('Product 40'), findsOneWidget);
+      expect(find.text("That's all 40 products"), findsOneWidget);
+    });
+
+    testWidgets('shows a spinner under the list while the page loads', (
+      tester,
+    ) async {
+      final pendingPage = Completer<Result<PaginatedProducts>>();
+      givenPage(0, [
+        Result.ok(productsPage(numberedProducts(1, 20), total: 40)),
+      ]);
+      when(() => getProducts(skip: 20)).thenAnswer((_) => pendingPage.future);
+      await pumpProductsPage(tester);
+      await tester.pumpAndSettle();
+
+      await tester.drag(find.byType(ListView), const Offset(0, -5000));
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      pendingPage.complete(
+        Result.ok(productsPage(numberedProducts(21, 20), skip: 20, total: 40)),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+    });
+
+    testWidgets('shows the error under the list and only the button retries', (
+      tester,
+    ) async {
+      givenPage(0, [
+        Result.ok(productsPage(numberedProducts(1, 20), total: 40)),
+      ]);
+      givenPage(20, [
+        const Result.err(Failure.network()),
+        Result.ok(productsPage(numberedProducts(21, 20), skip: 20, total: 40)),
+      ]);
+      await pumpProductsPage(tester);
+      await tester.pumpAndSettle();
+
+      await scrollToEnd(tester);
+      expect(find.text(networkMessage), findsOneWidget);
+
+      // Scrolling away and back does not send another request.
+      await tester.drag(find.byType(ListView), const Offset(0, 600));
+      await tester.pumpAndSettle();
+      await scrollToEnd(tester);
+      verify(() => getProducts(skip: 20)).called(1);
+
+      await tester.tap(find.widgetWithText(TextButton, 'Try again'));
+      await tester.pumpAndSettle();
+      await scrollToEnd(tester);
+
+      verify(() => getProducts(skip: 20)).called(1);
+      expect(find.text(networkMessage), findsNothing);
+      expect(find.text('Product 40'), findsOneWidget);
+    });
+
+    testWidgets('marks the end of a list that fits on one page', (
+      tester,
+    ) async {
+      givenPage(0, [Result.ok(productsPage(numberedProducts(1, 3), total: 3))]);
+
+      await pumpProductsPage(tester);
+      await tester.pumpAndSettle();
+
+      expect(find.text("That's all 3 products"), findsOneWidget);
+      verifyNever(() => getProducts(skip: 3));
+    });
+
+    testWidgets('loads more right away when a page does not fill the screen', (
+      tester,
+    ) async {
+      givenPage(0, [Result.ok(productsPage(numberedProducts(1, 3), total: 6))]);
+      givenPage(3, [
+        Result.ok(productsPage(numberedProducts(4, 3), skip: 3, total: 6)),
+      ]);
+
+      await pumpProductsPage(tester);
+      await tester.pumpAndSettle();
+
+      // Requested without any scrolling.
+      verify(() => getProducts(skip: 3)).called(1);
+
+      await scrollToEnd(tester);
+      expect(find.text('Product 6'), findsOneWidget);
+      expect(find.text("That's all 6 products"), findsOneWidget);
+    });
+  });
 }

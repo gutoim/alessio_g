@@ -55,12 +55,13 @@ extension ProductsEventPatterns on ProductsEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ProductsLoadRequested value)?  loadRequested,TResult Function( ProductsRefreshRequested value)?  refreshRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ProductsLoadRequested value)?  loadRequested,TResult Function( ProductsRefreshRequested value)?  refreshRequested,TResult Function( ProductsNextPageRequested value)?  nextPageRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case ProductsLoadRequested() when loadRequested != null:
 return loadRequested(_that);case ProductsRefreshRequested() when refreshRequested != null:
-return refreshRequested(_that);case _:
+return refreshRequested(_that);case ProductsNextPageRequested() when nextPageRequested != null:
+return nextPageRequested(_that);case _:
   return orElse();
 
 }
@@ -78,12 +79,13 @@ return refreshRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ProductsLoadRequested value)  loadRequested,required TResult Function( ProductsRefreshRequested value)  refreshRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ProductsLoadRequested value)  loadRequested,required TResult Function( ProductsRefreshRequested value)  refreshRequested,required TResult Function( ProductsNextPageRequested value)  nextPageRequested,}){
 final _that = this;
 switch (_that) {
 case ProductsLoadRequested():
 return loadRequested(_that);case ProductsRefreshRequested():
-return refreshRequested(_that);}
+return refreshRequested(_that);case ProductsNextPageRequested():
+return nextPageRequested(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -97,12 +99,13 @@ return refreshRequested(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ProductsLoadRequested value)?  loadRequested,TResult? Function( ProductsRefreshRequested value)?  refreshRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ProductsLoadRequested value)?  loadRequested,TResult? Function( ProductsRefreshRequested value)?  refreshRequested,TResult? Function( ProductsNextPageRequested value)?  nextPageRequested,}){
 final _that = this;
 switch (_that) {
 case ProductsLoadRequested() when loadRequested != null:
 return loadRequested(_that);case ProductsRefreshRequested() when refreshRequested != null:
-return refreshRequested(_that);case _:
+return refreshRequested(_that);case ProductsNextPageRequested() when nextPageRequested != null:
+return nextPageRequested(_that);case _:
   return null;
 
 }
@@ -119,11 +122,12 @@ return refreshRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadRequested,TResult Function()?  refreshRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadRequested,TResult Function()?  refreshRequested,TResult Function()?  nextPageRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ProductsLoadRequested() when loadRequested != null:
 return loadRequested();case ProductsRefreshRequested() when refreshRequested != null:
-return refreshRequested();case _:
+return refreshRequested();case ProductsNextPageRequested() when nextPageRequested != null:
+return nextPageRequested();case _:
   return orElse();
 
 }
@@ -141,11 +145,12 @@ return refreshRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadRequested,required TResult Function()  refreshRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadRequested,required TResult Function()  refreshRequested,required TResult Function()  nextPageRequested,}) {final _that = this;
 switch (_that) {
 case ProductsLoadRequested():
 return loadRequested();case ProductsRefreshRequested():
-return refreshRequested();}
+return refreshRequested();case ProductsNextPageRequested():
+return nextPageRequested();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -159,11 +164,12 @@ return refreshRequested();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadRequested,TResult? Function()?  refreshRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadRequested,TResult? Function()?  refreshRequested,TResult? Function()?  nextPageRequested,}) {final _that = this;
 switch (_that) {
 case ProductsLoadRequested() when loadRequested != null:
 return loadRequested();case ProductsRefreshRequested() when refreshRequested != null:
-return refreshRequested();case _:
+return refreshRequested();case ProductsNextPageRequested() when nextPageRequested != null:
+return nextPageRequested();case _:
   return null;
 
 }
@@ -227,6 +233,38 @@ int get hashCode => runtimeType.hashCode;
 @override
 String toString() {
   return 'ProductsEvent.refreshRequested()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class ProductsNextPageRequested implements ProductsEvent {
+  const ProductsNextPageRequested();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsNextPageRequested);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ProductsEvent.nextPageRequested()';
 }
 
 
