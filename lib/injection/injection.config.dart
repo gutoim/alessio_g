@@ -12,11 +12,14 @@
 
 import 'package:dio/dio.dart' as _i361;
 import 'package:dummy_shop/data/network/auth_interceptor.dart' as _i74;
+import 'package:dummy_shop/data/network/token_refresh_interceptor.dart'
+    as _i824;
 import 'package:dummy_shop/data/repositories/auth_repository_impl.dart'
     as _i694;
 import 'package:dummy_shop/data/sources/local/auth_status_source.dart' as _i159;
 import 'package:dummy_shop/data/sources/local/token_storage.dart' as _i363;
 import 'package:dummy_shop/data/sources/remote/auth_api.dart' as _i180;
+import 'package:dummy_shop/data/sources/remote/token_refresh_api.dart' as _i818;
 import 'package:dummy_shop/domain/repositories/auth_repository.dart' as _i245;
 import 'package:dummy_shop/domain/use_cases/login_use_case.dart' as _i760;
 import 'package:dummy_shop/domain/use_cases/logout_use_case.dart' as _i362;
@@ -51,11 +54,29 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i363.TokenStorage>(
       () => _i363.TokenStorage(gh<_i558.FlutterSecureStorage>()),
     );
+    gh.lazySingleton<_i361.Dio>(
+      () => networkModule.plainDio(),
+      instanceName: 'plainDio',
+    );
     gh.lazySingleton<_i74.AuthInterceptor>(
       () => _i74.AuthInterceptor(gh<_i363.TokenStorage>()),
     );
+    gh.lazySingleton<_i818.TokenRefreshApi>(
+      () => _i818.TokenRefreshApi(gh<_i361.Dio>(instanceName: 'plainDio')),
+    );
+    gh.lazySingleton<_i824.TokenRefreshInterceptor>(
+      () => _i824.TokenRefreshInterceptor(
+        gh<_i363.TokenStorage>(),
+        gh<_i818.TokenRefreshApi>(),
+        gh<_i159.AuthStatusSource>(),
+        gh<_i361.Dio>(instanceName: 'plainDio'),
+      ),
+    );
     gh.lazySingleton<_i361.Dio>(
-      () => networkModule.dio(gh<_i74.AuthInterceptor>()),
+      () => networkModule.dio(
+        gh<_i74.AuthInterceptor>(),
+        gh<_i824.TokenRefreshInterceptor>(),
+      ),
     );
     gh.lazySingleton<_i180.AuthApi>(() => _i180.AuthApi(gh<_i361.Dio>()));
     gh.lazySingleton<_i245.AuthRepository>(

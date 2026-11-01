@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:dummy_shop/data/network/api_config.dart';
 import 'package:dummy_shop/data/network/auth_interceptor.dart';
+import 'package:dummy_shop/data/network/dio_names.dart';
+import 'package:dummy_shop/data/network/token_refresh_interceptor.dart';
 import 'package:dummy_shop/data/repositories/auth_repository_impl.dart';
 import 'package:dummy_shop/domain/repositories/auth_repository.dart';
 import 'package:dummy_shop/domain/use_cases/login_use_case.dart';
@@ -49,11 +51,19 @@ void main() {
       expect(dio.options.receiveTimeout, ApiConfig.receiveTimeout);
     });
 
-    test('adds the access token to requests', () {
-      expect(
-        getIt<Dio>().interceptors.whereType<AuthInterceptor>(),
-        hasLength(1),
-      );
+    test('adds the access token and refreshes it when it expires', () {
+      final interceptors = getIt<Dio>().interceptors;
+
+      expect(interceptors.whereType<AuthInterceptor>(), hasLength(1));
+      expect(interceptors.whereType<TokenRefreshInterceptor>(), hasLength(1));
+    });
+
+    test('the plain client used for refresh has no auth interceptors', () {
+      final plain = getIt<Dio>(instanceName: DioNames.plain);
+
+      expect(plain, isNot(same(getIt<Dio>())));
+      expect(plain.interceptors.whereType<AuthInterceptor>(), isEmpty);
+      expect(plain.interceptors.whereType<TokenRefreshInterceptor>(), isEmpty);
     });
 
     test('debug logging never prints headers or bodies', () {
