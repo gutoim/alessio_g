@@ -2,15 +2,43 @@
   "@@locale": "en",
   "appTitle": "DummyJSON Shop",
   "@appTitle": {
-    "description": "Application title shown in the task switcher and app bar."
+    "description": "Application title shown in the task switcher and on the login screen."
   },
-  "loginTitle": "Sign in",
-  "@loginTitle": {
-    "description": "App bar title of the login screen."
+  "loginSubtitle": "Sign in to continue",
+  "@loginSubtitle": {
+    "description": "Text under the app title on the login screen."
+  },
+  "loginUsernameLabel": "Username",
+  "@loginUsernameLabel": {
+    "description": "Label of the username field on the login screen."
+  },
+  "loginPasswordLabel": "Password",
+  "@loginPasswordLabel": {
+    "description": "Label of the password field on the login screen."
+  },
+  "loginShowPassword": "Show password",
+  "@loginShowPassword": {
+    "description": "Tooltip of the button that reveals the password."
+  },
+  "loginHidePassword": "Hide password",
+  "@loginHidePassword": {
+    "description": "Tooltip of the button that hides the password again."
+  },
+  "loginUsernameRequired": "Enter your username",
+  "@loginUsernameRequired": {
+    "description": "Validation error when the username field is empty."
+  },
+  "loginPasswordRequired": "Enter your password",
+  "@loginPasswordRequired": {
+    "description": "Validation error when the password field is empty."
   },
   "loginButton": "Log in",
   "@loginButton": {
     "description": "Primary button on the login screen that submits the credentials."
+  },
+  "loginInProgress": "Logging in",
+  "@loginInProgress": {
+    "description": "Screen reader label of the login button while the request is running."
   },
   "productsTitle": "Products",
   "@productsTitle": {
@@ -19,5 +47,29 @@
   "productDetailTitle": "Product details",
   "@productDetailTitle": {
     "description": "App bar title of the product detail screen."
+  },
+  "failureInvalidCredentials": "Wrong username or password.",
+  "@failureInvalidCredentials": {
+    "description": "Shown when the login is rejected."
+  },
+  "failureNetwork": "No internet connection. Check your connection and try again.",
+  "@failureNetwork": {
+    "description": "Shown when the server can't be reached or the request timed out."
+  },
+  "failureUnauthorized": "Your session has expired. Please log in again.",
+  "@failureUnauthorized": {
+    "description": "Shown when the access token is missing, invalid or expired."
+  },
+  "failureNotFound": "We couldn't find what you were looking for.",
+  "@failureNotFound": {
+    "description": "Shown when the requested item does not exist."
+  },
+  "failureServer": "Something went wrong on our side. Please try again.",
+  "@failureServer": {
+    "description": "Shown for unexpected HTTP errors from the server."
+  },
+  "failureUnknown": "Something went wrong. Please try again.",
+  "@failureUnknown": {
+    "description": "Shown for any other unexpected error."
   }
 }

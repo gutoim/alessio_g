@@ -12,14 +12,56 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'DummyJSON Shop';
 
   @override
-  String get loginTitle => 'Sign in';
+  String get loginSubtitle => 'Sign in to continue';
+
+  @override
+  String get loginUsernameLabel => 'Username';
+
+  @override
+  String get loginPasswordLabel => 'Password';
+
+  @override
+  String get loginShowPassword => 'Show password';
+
+  @override
+  String get loginHidePassword => 'Hide password';
+
+  @override
+  String get loginUsernameRequired => 'Enter your username';
+
+  @override
+  String get loginPasswordRequired => 'Enter your password';
 
   @override
   String get loginButton => 'Log in';
+
+  @override
+  String get loginInProgress => 'Logging in';
 
   @override
   String get productsTitle => 'Products';
 
   @override
   String get productDetailTitle => 'Product details';
+
+  @override
+  String get failureInvalidCredentials => 'Wrong username or password.';
+
+  @override
+  String get failureNetwork =>
+      'No internet connection. Check your connection and try again.';
+
+  @override
+  String get failureUnauthorized =>
+      'Your session has expired. Please log in again.';
+
+  @override
+  String get failureNotFound => 'We couldn\'t find what you were looking for.';
+
+  @override
+  String get failureServer =>
+      'Something went wrong on our side. Please try again.';
+
+  @override
+  String get failureUnknown => 'Something went wrong. Please try again.';
 }

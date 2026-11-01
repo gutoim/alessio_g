@@ -24,6 +24,7 @@ import 'package:dummy_shop/domain/use_cases/watch_auth_status_use_case.dart'
 import 'package:dummy_shop/injection/modules/network_module.dart' as _i794;
 import 'package:dummy_shop/injection/modules/storage_module.dart' as _i918;
 import 'package:dummy_shop/presentation/app/router/app_router.dart' as _i60;
+import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart' as _i99;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -66,6 +67,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i701.WatchAuthStatusUseCase>(
       () => _i701.WatchAuthStatusUseCase(gh<_i245.AuthRepository>()),
     );
+    gh.factory<_i99.LoginBloc>(() => _i99.LoginBloc(gh<_i760.LoginUseCase>()));
     return this;
   }
 }

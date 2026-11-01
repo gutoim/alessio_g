@@ -94,23 +94,65 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[Locale('en')];
 
-  /// Application title shown in the task switcher and app bar.
+  /// Application title shown in the task switcher and on the login screen.
   ///
   /// In en, this message translates to:
   /// **'DummyJSON Shop'**
   String get appTitle;
 
-  /// App bar title of the login screen.
+  /// Text under the app title on the login screen.
   ///
   /// In en, this message translates to:
-  /// **'Sign in'**
-  String get loginTitle;
+  /// **'Sign in to continue'**
+  String get loginSubtitle;
+
+  /// Label of the username field on the login screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get loginUsernameLabel;
+
+  /// Label of the password field on the login screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get loginPasswordLabel;
+
+  /// Tooltip of the button that reveals the password.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get loginShowPassword;
+
+  /// Tooltip of the button that hides the password again.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get loginHidePassword;
+
+  /// Validation error when the username field is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your username'**
+  String get loginUsernameRequired;
+
+  /// Validation error when the password field is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get loginPasswordRequired;
 
   /// Primary button on the login screen that submits the credentials.
   ///
   /// In en, this message translates to:
   /// **'Log in'**
   String get loginButton;
+
+  /// Screen reader label of the login button while the request is running.
+  ///
+  /// In en, this message translates to:
+  /// **'Logging in'**
+  String get loginInProgress;
 
   /// App bar title of the product list screen.
   ///
@@ -123,6 +165,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Product details'**
   String get productDetailTitle;
+
+  /// Shown when the login is rejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong username or password.'**
+  String get failureInvalidCredentials;
+
+  /// Shown when the server can't be reached or the request timed out.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Check your connection and try again.'**
+  String get failureNetwork;
+
+  /// Shown when the access token is missing, invalid or expired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has expired. Please log in again.'**
+  String get failureUnauthorized;
+
+  /// Shown when the requested item does not exist.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t find what you were looking for.'**
+  String get failureNotFound;
+
+  /// Shown for unexpected HTTP errors from the server.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong on our side. Please try again.'**
+  String get failureServer;
+
+  /// Shown for any other unexpected error.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get failureUnknown;
 }
 
 class _AppLocalizationsDelegate

@@ -1,7 +1,10 @@
+import 'package:dummy_shop/injection/injection.dart';
 import 'package:dummy_shop/presentation/app/router/app_routes.dart';
+import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart';
 import 'package:dummy_shop/presentation/login/pages/login_page.dart';
 import 'package:dummy_shop/presentation/product_detail/pages/product_detail_page.dart';
 import 'package:dummy_shop/presentation/products/pages/products_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
@@ -9,6 +12,9 @@ import 'package:injectable/injectable.dart';
 ///
 /// It is a singleton so the navigation stack survives widget rebuilds.
 /// The auth redirect guard is added together with session handling.
+///
+/// Route builders are the composition points for screens: each one creates
+/// the screen's BLoC from [getIt], so pages never touch the service locator.
 @singleton
 class AppRouter {
   final GoRouter config = GoRouter(
@@ -16,7 +22,10 @@ class AppRouter {
     routes: [
       GoRoute(
         path: AppRoutes.login,
-        builder: (context, state) => const LoginPage(),
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<LoginBloc>(),
+          child: const LoginPage(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.products,
