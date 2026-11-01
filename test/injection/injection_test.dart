@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:dummy_shop/data/network/api_config.dart';
+import 'package:dummy_shop/data/repositories/auth_repository_impl.dart';
+import 'package:dummy_shop/domain/repositories/auth_repository.dart';
+import 'package:dummy_shop/domain/use_cases/login_use_case.dart';
 import 'package:dummy_shop/injection/injection.dart';
 import 'package:dummy_shop/presentation/app/router/app_router.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +13,15 @@ void main() {
 
   test('registers AppRouter as a singleton', () {
     expect(getIt<AppRouter>(), same(getIt<AppRouter>()));
+  });
+
+  test('binds AuthRepository to its implementation, as a singleton', () {
+    expect(getIt<AuthRepository>(), isA<AuthRepositoryImpl>());
+    expect(getIt<AuthRepository>(), same(getIt<AuthRepository>()));
+  });
+
+  test('creates a new use case on every lookup', () {
+    expect(getIt<LoginUseCase>(), isNot(same(getIt<LoginUseCase>())));
   });
 
   group('Dio', () {

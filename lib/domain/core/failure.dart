@@ -11,6 +11,9 @@ sealed class Failure with _$Failure {
   /// No connection, DNS or TLS failure, or a timeout.
   const factory Failure.network() = NetworkFailure;
 
+  /// The username or password was rejected at login.
+  const factory Failure.invalidCredentials() = InvalidCredentialsFailure;
+
   /// Missing, invalid or expired access token (HTTP 401).
   const factory Failure.unauthorized() = UnauthorizedFailure;
 

@@ -4,13 +4,10 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
-  # Generated code is not hand-written, so it is not analyzed.
-  exclude:
-    - "**/*.g.dart"
-    - "**/*.freezed.dart"
-    - "**/*.config.dart"
-    - "lib/l10n/gen/**"
-
+  # Generated files (*.g.dart, *.freezed.dart, injection.config.dart, l10n/gen)
+  # are analyzed on purpose. Their generators already disable lints with
+  # `ignore_for_file: type=lint`, and excluding them would also hide real
+  # compile errors in generated code.
   language:
     strict-casts: true
     strict-inference: true

@@ -55,11 +55,12 @@ extension FailurePatterns on Failure {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( NetworkFailure value)?  network,TResult Function( UnauthorizedFailure value)?  unauthorized,TResult Function( NotFoundFailure value)?  notFound,TResult Function( ServerFailure value)?  server,TResult Function( UnknownFailure value)?  unknown,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( NetworkFailure value)?  network,TResult Function( InvalidCredentialsFailure value)?  invalidCredentials,TResult Function( UnauthorizedFailure value)?  unauthorized,TResult Function( NotFoundFailure value)?  notFound,TResult Function( ServerFailure value)?  server,TResult Function( UnknownFailure value)?  unknown,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case NetworkFailure() when network != null:
-return network(_that);case UnauthorizedFailure() when unauthorized != null:
+return network(_that);case InvalidCredentialsFailure() when invalidCredentials != null:
+return invalidCredentials(_that);case UnauthorizedFailure() when unauthorized != null:
 return unauthorized(_that);case NotFoundFailure() when notFound != null:
 return notFound(_that);case ServerFailure() when server != null:
 return server(_that);case UnknownFailure() when unknown != null:
@@ -81,11 +82,12 @@ return unknown(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( NetworkFailure value)  network,required TResult Function( UnauthorizedFailure value)  unauthorized,required TResult Function( NotFoundFailure value)  notFound,required TResult Function( ServerFailure value)  server,required TResult Function( UnknownFailure value)  unknown,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( NetworkFailure value)  network,required TResult Function( InvalidCredentialsFailure value)  invalidCredentials,required TResult Function( UnauthorizedFailure value)  unauthorized,required TResult Function( NotFoundFailure value)  notFound,required TResult Function( ServerFailure value)  server,required TResult Function( UnknownFailure value)  unknown,}){
 final _that = this;
 switch (_that) {
 case NetworkFailure():
-return network(_that);case UnauthorizedFailure():
+return network(_that);case InvalidCredentialsFailure():
+return invalidCredentials(_that);case UnauthorizedFailure():
 return unauthorized(_that);case NotFoundFailure():
 return notFound(_that);case ServerFailure():
 return server(_that);case UnknownFailure():
@@ -103,11 +105,12 @@ return unknown(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( NetworkFailure value)?  network,TResult? Function( UnauthorizedFailure value)?  unauthorized,TResult? Function( NotFoundFailure value)?  notFound,TResult? Function( ServerFailure value)?  server,TResult? Function( UnknownFailure value)?  unknown,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( NetworkFailure value)?  network,TResult? Function( InvalidCredentialsFailure value)?  invalidCredentials,TResult? Function( UnauthorizedFailure value)?  unauthorized,TResult? Function( NotFoundFailure value)?  notFound,TResult? Function( ServerFailure value)?  server,TResult? Function( UnknownFailure value)?  unknown,}){
 final _that = this;
 switch (_that) {
 case NetworkFailure() when network != null:
-return network(_that);case UnauthorizedFailure() when unauthorized != null:
+return network(_that);case InvalidCredentialsFailure() when invalidCredentials != null:
+return invalidCredentials(_that);case UnauthorizedFailure() when unauthorized != null:
 return unauthorized(_that);case NotFoundFailure() when notFound != null:
 return notFound(_that);case ServerFailure() when server != null:
 return server(_that);case UnknownFailure() when unknown != null:
@@ -128,10 +131,11 @@ return unknown(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  network,TResult Function()?  unauthorized,TResult Function()?  notFound,TResult Function( int? statusCode,  String? message)?  server,TResult Function()?  unknown,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  network,TResult Function()?  invalidCredentials,TResult Function()?  unauthorized,TResult Function()?  notFound,TResult Function( int? statusCode,  String? message)?  server,TResult Function()?  unknown,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case NetworkFailure() when network != null:
-return network();case UnauthorizedFailure() when unauthorized != null:
+return network();case InvalidCredentialsFailure() when invalidCredentials != null:
+return invalidCredentials();case UnauthorizedFailure() when unauthorized != null:
 return unauthorized();case NotFoundFailure() when notFound != null:
 return notFound();case ServerFailure() when server != null:
 return server(_that.statusCode,_that.message);case UnknownFailure() when unknown != null:
@@ -153,10 +157,11 @@ return unknown();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  network,required TResult Function()  unauthorized,required TResult Function()  notFound,required TResult Function( int? statusCode,  String? message)  server,required TResult Function()  unknown,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  network,required TResult Function()  invalidCredentials,required TResult Function()  unauthorized,required TResult Function()  notFound,required TResult Function( int? statusCode,  String? message)  server,required TResult Function()  unknown,}) {final _that = this;
 switch (_that) {
 case NetworkFailure():
-return network();case UnauthorizedFailure():
+return network();case InvalidCredentialsFailure():
+return invalidCredentials();case UnauthorizedFailure():
 return unauthorized();case NotFoundFailure():
 return notFound();case ServerFailure():
 return server(_that.statusCode,_that.message);case UnknownFailure():
@@ -174,10 +179,11 @@ return unknown();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  network,TResult? Function()?  unauthorized,TResult? Function()?  notFound,TResult? Function( int? statusCode,  String? message)?  server,TResult? Function()?  unknown,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  network,TResult? Function()?  invalidCredentials,TResult? Function()?  unauthorized,TResult? Function()?  notFound,TResult? Function( int? statusCode,  String? message)?  server,TResult? Function()?  unknown,}) {final _that = this;
 switch (_that) {
 case NetworkFailure() when network != null:
-return network();case UnauthorizedFailure() when unauthorized != null:
+return network();case InvalidCredentialsFailure() when invalidCredentials != null:
+return invalidCredentials();case UnauthorizedFailure() when unauthorized != null:
 return unauthorized();case NotFoundFailure() when notFound != null:
 return notFound();case ServerFailure() when server != null:
 return server(_that.statusCode,_that.message);case UnknownFailure() when unknown != null:
@@ -213,6 +219,38 @@ int get hashCode => runtimeType.hashCode;
 @override
 String toString() {
   return 'Failure.network()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class InvalidCredentialsFailure implements Failure {
+  const InvalidCredentialsFailure();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InvalidCredentialsFailure);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'Failure.invalidCredentials()';
 }
 
 
