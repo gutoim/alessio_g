@@ -1,0 +1,7 @@
+{
+  "@@locale": "en",
+  "appTitle": "DummyJSON Shop",
+  "@appTitle": {
+    "description": "Application title shown in the task switcher and app bar."
+  }
+}

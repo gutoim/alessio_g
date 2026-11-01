@@ -1,6 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Required for API calls in release builds (debug/profile manifests already declare it). -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- allowBackup=false: restoring flutter_secure_storage data from a backup on another
+         device fails with "InvalidKeyException: Failed to unwrap key" (see package README). -->
     <application
         android:label="dummy_shop"
+        android:allowBackup="false"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
