@@ -45,6 +45,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productsTitle => 'Products';
 
   @override
+  String get productsEmptyTitle => 'No products yet';
+
+  @override
+  String get productsEmptyMessage => 'Pull down to check again.';
+
+  @override
+  String get retryButton => 'Try again';
+
+  @override
+  String priceWithDiscount(String price, String originalPrice) {
+    return '$price, reduced from $originalPrice';
+  }
+
+  @override
+  String ratingLabel(String rating) {
+    return 'Rated $rating out of 5';
+  }
+
+  @override
   String get productDetailTitle => 'Product details';
 
   @override

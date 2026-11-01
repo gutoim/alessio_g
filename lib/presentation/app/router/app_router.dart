@@ -5,6 +5,8 @@ import 'package:dummy_shop/presentation/app/router/stream_listenable.dart';
 import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart';
 import 'package:dummy_shop/presentation/login/pages/login_page.dart';
 import 'package:dummy_shop/presentation/product_detail/pages/product_detail_page.dart';
+import 'package:dummy_shop/presentation/products/bloc/products_bloc.dart';
+import 'package:dummy_shop/presentation/products/bloc/products_event.dart';
 import 'package:dummy_shop/presentation/products/pages/products_page.dart';
 import 'package:dummy_shop/presentation/session/bloc/session_bloc.dart';
 import 'package:dummy_shop/presentation/splash/pages/splash_page.dart';
@@ -42,7 +44,11 @@ class AppRouter {
         ),
         GoRoute(
           path: AppRoutes.products,
-          builder: (context, state) => const ProductsPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) =>
+                getIt<ProductsBloc>()..add(const ProductsEvent.loadRequested()),
+            child: const ProductsPage(),
+          ),
           routes: [
             GoRoute(
               path: ':$_productIdParam',

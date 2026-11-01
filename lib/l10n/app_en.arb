@@ -48,6 +48,33 @@
   "@productsTitle": {
     "description": "App bar title of the product list screen."
   },
+  "productsEmptyTitle": "No products yet",
+  "@productsEmptyTitle": {
+    "description": "Title of the empty state of the product list."
+  },
+  "productsEmptyMessage": "Pull down to check again.",
+  "@productsEmptyMessage": {
+    "description": "Hint under the empty state title of the product list."
+  },
+  "retryButton": "Try again",
+  "@retryButton": {
+    "description": "Button that repeats a request that failed."
+  },
+  "priceWithDiscount": "{price}, reduced from {originalPrice}",
+  "@priceWithDiscount": {
+    "description": "Screen reader text for a discounted price.",
+    "placeholders": {
+      "price": {"type": "String", "example": "$8.94"},
+      "originalPrice": {"type": "String", "example": "$9.99"}
+    }
+  },
+  "ratingLabel": "Rated {rating} out of 5",
+  "@ratingLabel": {
+    "description": "Screen reader text for a product rating.",
+    "placeholders": {
+      "rating": {"type": "String", "example": "4.5"}
+    }
+  },
   "productDetailTitle": "Product details",
   "@productDetailTitle": {
     "description": "App bar title of the product detail screen."

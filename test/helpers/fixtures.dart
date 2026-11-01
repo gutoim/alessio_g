@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dummy_shop/domain/entities/paginated_products.dart';
 import 'package:dummy_shop/domain/entities/product.dart';
 import 'package:dummy_shop/domain/entities/user.dart';
 
@@ -39,3 +40,20 @@ const testProduct = Product(
   ],
   brand: 'Essence',
 );
+
+/// A second, different product (no discount, no brand).
+final otherProduct = testProduct.copyWith(
+  id: 26,
+  title: 'Green Chili Pepper',
+  category: 'groceries',
+  price: 0.99,
+  discountPercentage: 0,
+  brand: null,
+);
+
+/// A page of [items] starting at [skip], out of a catalog of [total].
+PaginatedProducts productsPage(
+  List<Product> items, {
+  int skip = 0,
+  int total = 194,
+}) => PaginatedProducts(items: items, skip: skip, total: total);

@@ -37,6 +37,8 @@ import 'package:dummy_shop/injection/modules/network_module.dart' as _i794;
 import 'package:dummy_shop/injection/modules/storage_module.dart' as _i918;
 import 'package:dummy_shop/presentation/app/router/app_router.dart' as _i60;
 import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart' as _i99;
+import 'package:dummy_shop/presentation/products/bloc/products_bloc.dart'
+    as _i33;
 import 'package:dummy_shop/presentation/session/bloc/session_bloc.dart'
     as _i235;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
@@ -112,6 +114,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i701.WatchAuthStatusUseCase>(
       () => _i701.WatchAuthStatusUseCase(gh<_i245.AuthRepository>()),
+    );
+    gh.factory<_i33.ProductsBloc>(
+      () => _i33.ProductsBloc(gh<_i586.GetProductsUseCase>()),
     );
     gh.lazySingleton<_i235.SessionBloc>(
       () => _i235.SessionBloc(

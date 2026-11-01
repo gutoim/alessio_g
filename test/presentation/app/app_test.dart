@@ -9,6 +9,7 @@ import 'package:dummy_shop/presentation/app/router/app_routes.dart';
 import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart';
 import 'package:dummy_shop/presentation/login/pages/login_page.dart';
 import 'package:dummy_shop/presentation/product_detail/pages/product_detail_page.dart';
+import 'package:dummy_shop/presentation/products/bloc/products_bloc.dart';
 import 'package:dummy_shop/presentation/products/pages/products_page.dart';
 import 'package:dummy_shop/presentation/session/bloc/session_bloc.dart';
 import 'package:dummy_shop/presentation/session/bloc/session_event.dart';
@@ -26,6 +27,7 @@ void main() {
   late MockLoginUseCase login;
   late MockLogoutUseCase logout;
   late MockWatchAuthStatusUseCase watchAuthStatus;
+  late MockGetProductsUseCase getProducts;
   late StreamController<AuthStatus> authStatus;
   late AppRouter appRouter;
 
@@ -33,6 +35,7 @@ void main() {
     login = MockLoginUseCase();
     logout = MockLogoutUseCase();
     watchAuthStatus = MockWatchAuthStatusUseCase();
+    getProducts = MockGetProductsUseCase();
 
     when(() => watchAuthStatus()).thenAnswer((_) => authStatus.stream);
     when(
@@ -43,7 +46,13 @@ void main() {
       return const Result.ok(testUser);
     });
 
-    getIt.registerFactory<LoginBloc>(() => LoginBloc(login));
+    when(
+      () => anyGetProducts(getProducts),
+    ).thenAnswer((_) async => Result.ok(productsPage([testProduct])));
+
+    getIt
+      ..registerFactory<LoginBloc>(() => LoginBloc(login))
+      ..registerFactory<ProductsBloc>(() => ProductsBloc(getProducts));
   });
 
   tearDown(getIt.reset);

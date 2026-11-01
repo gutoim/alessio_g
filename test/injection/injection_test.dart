@@ -11,6 +11,7 @@ import 'package:dummy_shop/domain/use_cases/login_use_case.dart';
 import 'package:dummy_shop/injection/injection.dart';
 import 'package:dummy_shop/presentation/app/router/app_router.dart';
 import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart';
+import 'package:dummy_shop/presentation/products/bloc/products_bloc.dart';
 import 'package:dummy_shop/presentation/session/bloc/session_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -42,6 +43,14 @@ void main() {
   test('creates a fresh LoginBloc for every login screen', () async {
     final first = getIt<LoginBloc>();
     final second = getIt<LoginBloc>();
+    addTearDown(() => Future.wait([first.close(), second.close()]));
+
+    expect(first, isNot(same(second)));
+  });
+
+  test('creates a fresh ProductsBloc for every product list', () async {
+    final first = getIt<ProductsBloc>();
+    final second = getIt<ProductsBloc>();
     addTearDown(() => Future.wait([first.close(), second.close()]));
 
     expect(first, isNot(same(second)));

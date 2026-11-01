@@ -166,6 +166,36 @@ abstract class AppLocalizations {
   /// **'Products'**
   String get productsTitle;
 
+  /// Title of the empty state of the product list.
+  ///
+  /// In en, this message translates to:
+  /// **'No products yet'**
+  String get productsEmptyTitle;
+
+  /// Hint under the empty state title of the product list.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull down to check again.'**
+  String get productsEmptyMessage;
+
+  /// Button that repeats a request that failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get retryButton;
+
+  /// Screen reader text for a discounted price.
+  ///
+  /// In en, this message translates to:
+  /// **'{price}, reduced from {originalPrice}'**
+  String priceWithDiscount(String price, String originalPrice);
+
+  /// Screen reader text for a product rating.
+  ///
+  /// In en, this message translates to:
+  /// **'Rated {rating} out of 5'**
+  String ratingLabel(String rating);
+
   /// App bar title of the product detail screen.
   ///
   /// In en, this message translates to:
