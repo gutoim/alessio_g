@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A newer push to the same branch or PR cancels the run still in progress.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Generated code, format, analyze, test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v7
+
+      # Third-party action: pinned to a commit so a moved tag cannot change it.
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+          flutter-version: 3.44.8 # the version the project is developed with
+          cache: true
+          pub-cache: true
+
+      # Also regenerates the localizations (`generate: true` in pubspec.yaml).
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Generated files are committed so the app runs without build_runner.
+      # This fails when someone changed an annotated class or an ARB file and
+      # did not commit the regenerated output.
+      - name: Check generated code is up to date
+        run: |
+          dart run build_runner build --delete-conflicting-outputs
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Generated files are out of date. Run 'dart run build_runner build --delete-conflicting-outputs' and commit the result."
+            git status --short
+            git diff --stat
+            exit 1
+          fi
+
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed lib test
+
+      # Fails on infos too, like a local `flutter analyze`.
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
