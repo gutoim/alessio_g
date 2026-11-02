@@ -197,6 +197,23 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('screens open as Material pages, with the platform transition', (
+    tester,
+  ) async {
+    await pumpApp(tester);
+    await givenStatus(tester, AuthStatus.authenticated);
+
+    await tester.tap(find.text('Essence Mascara Lash Princess'));
+    await tester.pumpAndSettle();
+
+    // Only Material page routes get the theme's page transition, and on iOS
+    // the swipe-back gesture. go_router's fallback pages have neither.
+    final route = ModalRoute.of<void>(
+      tester.element(find.byType(ProductDetailPage)),
+    );
+    expect(route, isA<MaterialRouteTransitionMixin<void>>());
+  });
+
   testWidgets('a non-numeric product id redirects to the products list', (
     tester,
   ) async {

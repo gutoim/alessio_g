@@ -13,6 +13,7 @@ import 'package:dummy_shop/presentation/products/bloc/products_event.dart';
 import 'package:dummy_shop/presentation/products/pages/products_page.dart';
 import 'package:dummy_shop/presentation/session/bloc/session_bloc.dart';
 import 'package:dummy_shop/presentation/splash/pages/splash_page.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
@@ -25,6 +26,8 @@ import 'package:injectable/injectable.dart';
 ///
 /// Route builders are the composition points for screens: each one creates
 /// the screen's BLoC from [getIt], so pages never touch the service locator.
+///
+/// Every route builds a [MaterialPage] itself (see [_page]).
 @lazySingleton
 class AppRouter {
   AppRouter(SessionBloc session) : _refresh = StreamListenable(session.stream) {
@@ -36,21 +39,28 @@ class AppRouter {
       routes: [
         GoRoute(
           path: AppRoutes.splash,
-          builder: (context, state) => const SplashPage(),
+          pageBuilder: (context, state) => _page(state, const SplashPage()),
         ),
         GoRoute(
           path: AppRoutes.login,
-          builder: (context, state) => BlocProvider(
-            create: (_) => getIt<LoginBloc>(),
-            child: const LoginPage(),
+          pageBuilder: (context, state) => _page(
+            state,
+            BlocProvider(
+              create: (_) => getIt<LoginBloc>(),
+              child: const LoginPage(),
+            ),
           ),
         ),
         GoRoute(
           path: AppRoutes.products,
-          builder: (context, state) => BlocProvider(
-            create: (_) =>
-                getIt<ProductsBloc>()..add(const ProductsEvent.loadRequested()),
-            child: const ProductsPage(),
+          pageBuilder: (context, state) => _page(
+            state,
+            BlocProvider(
+              create: (_) =>
+                  getIt<ProductsBloc>()
+                    ..add(const ProductsEvent.loadRequested()),
+              child: const ProductsPage(),
+            ),
           ),
           routes: [
             GoRoute(
@@ -59,7 +69,7 @@ class AppRouter {
               // failing in the detail page.
               redirect: (context, state) =>
                   _productId(state) == null ? AppRoutes.products : null,
-              builder: (context, state) {
+              pageBuilder: (context, state) {
                 final productId = _productId(state)!;
                 // The list passes the tapped product as `extra`. A deep link
                 // or a restored route has none, and loads by id instead.
@@ -67,15 +77,18 @@ class AppRouter {
                   final Product product => product,
                   _ => null,
                 };
-                return BlocProvider(
-                  create: (_) => getIt<ProductDetailBloc>()
-                    ..add(
-                      ProductDetailEvent.loadRequested(
-                        productId,
-                        preview: preview,
+                return _page(
+                  state,
+                  BlocProvider(
+                    create: (_) => getIt<ProductDetailBloc>()
+                      ..add(
+                        ProductDetailEvent.loadRequested(
+                          productId,
+                          preview: preview,
+                        ),
                       ),
-                    ),
-                  child: ProductDetailPage(productId: productId),
+                    child: ProductDetailPage(productId: productId),
+                  ),
                 );
               },
             ),
@@ -89,6 +102,21 @@ class AppRouter {
   late final GoRouter config;
 
   static const String _productIdParam = 'id';
+
+  /// Wraps a screen in a [MaterialPage], so it opens with the theme's page
+  /// transition: a slide with swipe-back on iOS, predictive back on Android.
+  ///
+  /// With a plain `builder`, go_router 18 picks the page type itself. It only
+  /// recognizes `MaterialApp` from the `material_ui` package, not the one from
+  /// `package:flutter/material.dart` this app uses. So it falls back to pages
+  /// without any transition, and iOS loses the swipe-back gesture.
+  static Page<void> _page(GoRouterState state, Widget child) =>
+      MaterialPage<void>(
+        key: state.pageKey,
+        name: state.name ?? state.path,
+        restorationId: state.pageKey.value,
+        child: child,
+      );
 
   static int? _productId(GoRouterState state) =>
       int.tryParse(state.pathParameters[_productIdParam] ?? '');
