@@ -19,16 +19,26 @@ void main() {
 
   setUp(() => getProduct = MockGetProductUseCase());
 
-  ProductDetailBloc buildBloc() => ProductDetailBloc(getProduct);
+  ProductDetailBloc buildBloc({Product? preview}) =>
+      ProductDetailBloc(getProduct, preview: preview);
 
   void givenProduct(Result<Product> result) =>
       when(() => getProduct(1)).thenAnswer((_) async => result);
 
-  test('starts loading', () {
+  test('starts loading without a preview', () {
     final bloc = buildBloc();
     addTearDown(bloc.close);
 
     expect(bloc.state, const ProductDetailState.loading());
+  });
+
+  // Not after an event: the page's first frame must already hold the
+  // gallery, or the list thumbnail cannot fly into it as a Hero.
+  test('starts with the preview', () {
+    final bloc = buildBloc(preview: testProduct);
+    addTearDown(bloc.close);
+
+    expect(bloc.state, const ProductDetailState.loaded(testProduct));
   });
 
   blocTest<ProductDetailBloc, ProductDetailState>(
@@ -41,25 +51,11 @@ void main() {
   );
 
   blocTest<ProductDetailBloc, ProductDetailState>(
-    'shows the preview at once, then the fresh product',
+    'replaces the preview with the fresh product, without a spinner',
     setUp: () => givenProduct(Result.ok(fresh)),
-    build: buildBloc,
-    act: (bloc) => bloc.add(
-      const ProductDetailEvent.loadRequested(1, preview: testProduct),
-    ),
-    expect: () => [
-      const ProductDetailState.loaded(testProduct),
-      ProductDetailState.loaded(fresh),
-    ],
-  );
-
-  blocTest<ProductDetailBloc, ProductDetailState>(
-    'ignores a preview of another product',
-    setUp: () => givenProduct(const Result.ok(testProduct)),
-    build: buildBloc,
-    act: (bloc) =>
-        bloc.add(ProductDetailEvent.loadRequested(1, preview: otherProduct)),
-    expect: () => const [ProductDetailState.loaded(testProduct)],
+    build: () => buildBloc(preview: testProduct),
+    act: (bloc) => bloc.add(const ProductDetailEvent.loadRequested(1)),
+    expect: () => [ProductDetailState.loaded(fresh)],
   );
 
   blocTest<ProductDetailBloc, ProductDetailState>(
@@ -73,11 +69,11 @@ void main() {
   blocTest<ProductDetailBloc, ProductDetailState>(
     'keeps the preview when the fetch fails',
     setUp: () => givenProduct(const Result.err(Failure.network())),
-    build: buildBloc,
-    act: (bloc) => bloc.add(
-      const ProductDetailEvent.loadRequested(1, preview: testProduct),
-    ),
-    expect: () => const [ProductDetailState.loaded(testProduct)],
+    build: () => buildBloc(preview: testProduct),
+    act: (bloc) => bloc.add(const ProductDetailEvent.loadRequested(1)),
+    expect: () => const <ProductDetailState>[],
+    verify: (bloc) =>
+        expect(bloc.state, const ProductDetailState.loaded(testProduct)),
   );
 
   blocTest<ProductDetailBloc, ProductDetailState>(

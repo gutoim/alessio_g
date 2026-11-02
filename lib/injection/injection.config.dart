@@ -23,6 +23,7 @@ import 'package:dummy_shop/data/sources/local/token_storage.dart' as _i363;
 import 'package:dummy_shop/data/sources/remote/auth_api.dart' as _i180;
 import 'package:dummy_shop/data/sources/remote/product_api.dart' as _i217;
 import 'package:dummy_shop/data/sources/remote/token_refresh_api.dart' as _i818;
+import 'package:dummy_shop/domain/entities/product.dart' as _i71;
 import 'package:dummy_shop/domain/repositories/auth_repository.dart' as _i245;
 import 'package:dummy_shop/domain/repositories/product_repository.dart'
     as _i610;
@@ -127,10 +128,13 @@ extension GetItInjectableX on _i174.GetIt {
       ),
       dispose: (i) => i.close(),
     );
-    gh.factory<_i99.LoginBloc>(() => _i99.LoginBloc(gh<_i760.LoginUseCase>()));
-    gh.factory<_i7.ProductDetailBloc>(
-      () => _i7.ProductDetailBloc(gh<_i430.GetProductUseCase>()),
+    gh.factoryParam<_i7.ProductDetailBloc, _i71.Product?, dynamic>(
+      (preview, _) => _i7.ProductDetailBloc(
+        gh<_i430.GetProductUseCase>(),
+        preview: preview,
+      ),
     );
+    gh.factory<_i99.LoginBloc>(() => _i99.LoginBloc(gh<_i760.LoginUseCase>()));
     gh.lazySingleton<_i60.AppRouter>(
       () => _i60.AppRouter(gh<_i235.SessionBloc>()),
       dispose: (i) => i.dispose(),

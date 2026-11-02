@@ -39,8 +39,8 @@ void main() {
         supportedLocales: AppLocalizations.supportedLocales,
         home: BlocProvider(
           create: (_) =>
-              ProductDetailBloc(getProduct)
-                ..add(ProductDetailEvent.loadRequested(1, preview: preview)),
+              ProductDetailBloc(getProduct, preview: preview)
+                ..add(const ProductDetailEvent.loadRequested(1)),
           child: const ProductDetailPage(productId: 1),
         ),
       ),

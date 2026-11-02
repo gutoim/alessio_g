@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProductDetailEvent {
 
- int get productId; Product? get preview;
+ int get productId;
 /// Create a copy of ProductDetailEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ProductDetailEventCopyWith<ProductDetailEvent> get copyWith => _$ProductDetailE
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductDetailEvent&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.preview, preview) || other.preview == preview));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductDetailEvent&&(identical(other.productId, productId) || other.productId == productId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,productId,preview);
+int get hashCode => Object.hash(runtimeType,productId);
 
 @override
 String toString() {
-  return 'ProductDetailEvent(productId: $productId, preview: $preview)';
+  return 'ProductDetailEvent(productId: $productId)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $ProductDetailEventCopyWith<$Res>  {
   factory $ProductDetailEventCopyWith(ProductDetailEvent value, $Res Function(ProductDetailEvent) _then) = _$ProductDetailEventCopyWithImpl;
 @useResult
 $Res call({
- int productId, Product? preview
+ int productId
 });
 
 
-$ProductCopyWith<$Res>? get preview;
+
 
 }
 /// @nodoc
@@ -62,26 +62,13 @@ class _$ProductDetailEventCopyWithImpl<$Res>
 
 /// Create a copy of ProductDetailEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? productId = null,Object? preview = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? productId = null,}) {
   return _then(_self.copyWith(
 productId: null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
-as int,preview: freezed == preview ? _self.preview : preview // ignore: cast_nullable_to_non_nullable
-as Product?,
+as int,
   ));
 }
-/// Create a copy of ProductDetailEvent
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$ProductCopyWith<$Res>? get preview {
-    if (_self.preview == null) {
-    return null;
-  }
 
-  return $ProductCopyWith<$Res>(_self.preview!, (value) {
-    return _then(_self.copyWith(preview: value));
-  });
-}
 }
 
 
@@ -160,10 +147,10 @@ return loadRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int productId,  Product? preview)?  loadRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int productId)?  loadRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ProductDetailLoadRequested() when loadRequested != null:
-return loadRequested(_that.productId,_that.preview);case _:
+return loadRequested(_that.productId);case _:
   return orElse();
 
 }
@@ -181,10 +168,10 @@ return loadRequested(_that.productId,_that.preview);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int productId,  Product? preview)  loadRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int productId)  loadRequested,}) {final _that = this;
 switch (_that) {
 case ProductDetailLoadRequested():
-return loadRequested(_that.productId,_that.preview);}
+return loadRequested(_that.productId);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -198,10 +185,10 @@ return loadRequested(_that.productId,_that.preview);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int productId,  Product? preview)?  loadRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int productId)?  loadRequested,}) {final _that = this;
 switch (_that) {
 case ProductDetailLoadRequested() when loadRequested != null:
-return loadRequested(_that.productId,_that.preview);case _:
+return loadRequested(_that.productId);case _:
   return null;
 
 }
@@ -213,11 +200,10 @@ return loadRequested(_that.productId,_that.preview);case _:
 
 
 class ProductDetailLoadRequested implements ProductDetailEvent {
-  const ProductDetailLoadRequested(this.productId, {this.preview});
+  const ProductDetailLoadRequested(this.productId);
   
 
 @override final  int productId;
-@override final  Product? preview;
 
 /// Create a copy of ProductDetailEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +215,16 @@ $ProductDetailLoadRequestedCopyWith<ProductDetailLoadRequested> get copyWith => 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductDetailLoadRequested&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.preview, preview) || other.preview == preview));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductDetailLoadRequested&&(identical(other.productId, productId) || other.productId == productId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,productId,preview);
+int get hashCode => Object.hash(runtimeType,productId);
 
 @override
 String toString() {
-  return 'ProductDetailEvent.loadRequested(productId: $productId, preview: $preview)';
+  return 'ProductDetailEvent.loadRequested(productId: $productId)';
 }
 
 
@@ -249,11 +235,11 @@ abstract mixin class $ProductDetailLoadRequestedCopyWith<$Res> implements $Produ
   factory $ProductDetailLoadRequestedCopyWith(ProductDetailLoadRequested value, $Res Function(ProductDetailLoadRequested) _then) = _$ProductDetailLoadRequestedCopyWithImpl;
 @override @useResult
 $Res call({
- int productId, Product? preview
+ int productId
 });
 
 
-@override $ProductCopyWith<$Res>? get preview;
+
 
 }
 /// @nodoc
@@ -266,27 +252,14 @@ class _$ProductDetailLoadRequestedCopyWithImpl<$Res>
 
 /// Create a copy of ProductDetailEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? productId = null,Object? preview = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? productId = null,}) {
   return _then(ProductDetailLoadRequested(
 null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
-as int,preview: freezed == preview ? _self.preview : preview // ignore: cast_nullable_to_non_nullable
-as Product?,
+as int,
   ));
 }
 
-/// Create a copy of ProductDetailEvent
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$ProductCopyWith<$Res>? get preview {
-    if (_self.preview == null) {
-    return null;
-  }
 
-  return $ProductCopyWith<$Res>(_self.preview!, (value) {
-    return _then(_self.copyWith(preview: value));
-  });
-}
 }
 
 // dart format on

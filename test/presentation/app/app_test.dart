@@ -7,6 +7,7 @@ import 'package:dummy_shop/injection/injection.dart';
 import 'package:dummy_shop/presentation/app/app.dart';
 import 'package:dummy_shop/presentation/app/router/app_router.dart';
 import 'package:dummy_shop/presentation/app/router/app_routes.dart';
+import 'package:dummy_shop/presentation/common/widgets/product_image.dart';
 import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart';
 import 'package:dummy_shop/presentation/login/pages/login_page.dart';
 import 'package:dummy_shop/presentation/product_detail/bloc/product_detail_bloc.dart';
@@ -61,7 +62,9 @@ void main() {
     getIt
       ..registerFactory<LoginBloc>(() => LoginBloc(login))
       ..registerFactory<ProductsBloc>(() => ProductsBloc(getProducts))
-      ..registerFactory<ProductDetailBloc>(() => ProductDetailBloc(getProduct));
+      ..registerFactoryParam<ProductDetailBloc, Product?, void>(
+        (preview, _) => ProductDetailBloc(getProduct, preview: preview),
+      );
   });
 
   tearDown(getIt.reset);
@@ -192,6 +195,46 @@ void main() {
     expect(find.byType(ProductDetailPage), findsOneWidget);
     expect(find.text('Description'), findsOneWidget);
     verify(() => getProduct(1)).called(1);
+
+    pendingFetch.complete(const Result.ok(testProduct));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the tapped thumbnail flies into the detail gallery', (
+    tester,
+  ) async {
+    final pendingFetch = Completer<Result<Product>>();
+    when(() => getProduct(1)).thenAnswer((_) => pendingFetch.future);
+    await pumpApp(tester);
+    await givenStatus(tester, AuthStatus.authenticated);
+
+    await tester.tap(find.text('Essence Mascara Lash Princess'));
+    await tester.pump(); // The detail page's first frame, where flights start.
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // In flight, the only image on screen is the Hero's, on its way from the
+    // 72 px thumbnail to the 420 px gallery. Without a flight, both of those
+    // would show instead.
+    final image = find.byType(ProductImage);
+    expect(image, findsOneWidget);
+    expect(tester.getSize(image).width, inExclusiveRange(72, 420));
+
+    pendingFetch.complete(const Result.ok(testProduct));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('ignores a preview of another product', (tester) async {
+    final pendingFetch = Completer<Result<Product>>();
+    when(() => getProduct(1)).thenAnswer((_) => pendingFetch.future);
+    await pumpApp(tester);
+    await givenStatus(tester, AuthStatus.authenticated);
+
+    appRouter.config.go(AppRoutes.productDetail(1), extra: otherProduct);
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+
+    expect(find.text(otherProduct.title), findsNothing);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
     pendingFetch.complete(const Result.ok(testProduct));
     await tester.pumpAndSettle();

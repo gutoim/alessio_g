@@ -74,19 +74,15 @@ class AppRouter {
                 // The list passes the tapped product as `extra`. A deep link
                 // or a restored route has none, and loads by id instead.
                 final preview = switch (state.extra) {
-                  final Product product => product,
+                  final Product product when product.id == productId => product,
                   _ => null,
                 };
                 return _page(
                   state,
                   BlocProvider(
-                    create: (_) => getIt<ProductDetailBloc>()
-                      ..add(
-                        ProductDetailEvent.loadRequested(
-                          productId,
-                          preview: preview,
-                        ),
-                      ),
+                    create: (_) =>
+                        getIt<ProductDetailBloc>(param1: preview)
+                          ..add(ProductDetailEvent.loadRequested(productId)),
                     child: ProductDetailPage(productId: productId),
                   ),
                 );

@@ -18,7 +18,7 @@ Log in with **`emilys` / `emilyspass`**.
   without code generation. After changing an annotated class:
   `dart run build_runner build --delete-conflicting-outputs`.
 - The API base URL can be overridden: `flutter run --dart-define=BASE_URL=https://dummyjson.com`.
-- `flutter test` runs 169 tests (about 97% line coverage of the hand-written code). CI runs the same
+- `flutter test` runs 171 tests (about 97% line coverage of the hand-written code). CI runs the same
   checks on every push to `main` and every pull request: [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ## What it does
@@ -84,7 +84,7 @@ navigates itself.
 | **Routes build their own `MaterialPage`** | go_router 18 recognizes only the `MaterialApp` from the new `material_ui` package, not the one in `package:flutter/material.dart`. Left to itself, it builds pages with no transition, so iOS loses the slide and the swipe-back gesture. |
 | **Token refresh** in a `QueuedInterceptor` | Requests that fail together share one refresh. Refresh and retry go through a second Dio client without the auth interceptors, so there are no refresh loops or deadlocks. A rejected refresh token (4xx) ends the session; being offline does not. |
 | **Pagination in the BLoC** | One page request at a time. A page that arrives after a pull-to-refresh is dropped instead of being mixed into the new list. A first page that doesn't fill the screen loads the next one, and after an error only the retry button loads again, so the app never fires request after request while offline. |
-| **Detail shows the list's data first** | No spinner when opening a product, and the image can animate. It still fetches by id, which keeps data fresh and makes `/products/:id` work on its own. |
+| **Detail shows the list's data first** | No spinner when opening a product, and the image can fly in. The BLoC starts with the list's product, because Flutter picks the Heroes to fly from the page's first frame. It still fetches by id, which keeps data fresh and makes `/products/:id` work on its own. |
 | **Generated code committed** | Reviewers can run the app straight away. CI fails if the committed files no longer match their sources. |
 | **Strict analysis** | Strict type checks, forgotten `await`s and unclosed streams as errors, and package imports only, so an import of `data/` inside `presentation/` stands out. |
 | **Localization from the start** | All UI text lives in `lib/l10n/app_en.arb`; adding a language is a new ARB file. |
