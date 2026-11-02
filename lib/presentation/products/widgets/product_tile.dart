@@ -27,13 +27,17 @@ class ProductTile extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(AppRadius.sm),
-              ),
-              child: SizedBox.square(
-                dimension: _thumbnailSize,
-                child: ProductImage(url: product.thumbnailUrl),
+            // Flies into the detail page's gallery.
+            Hero(
+              tag: productImageHeroTag(product.id),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(AppRadius.sm),
+                ),
+                child: SizedBox.square(
+                  dimension: _thumbnailSize,
+                  child: ProductImage(url: product.thumbnailUrl),
+                ),
               ),
             ),
             const SizedBox(width: AppSpacing.md),

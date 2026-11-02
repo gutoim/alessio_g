@@ -11,6 +11,7 @@ import 'package:dummy_shop/domain/use_cases/login_use_case.dart';
 import 'package:dummy_shop/injection/injection.dart';
 import 'package:dummy_shop/presentation/app/router/app_router.dart';
 import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart';
+import 'package:dummy_shop/presentation/product_detail/bloc/product_detail_bloc.dart';
 import 'package:dummy_shop/presentation/products/bloc/products_bloc.dart';
 import 'package:dummy_shop/presentation/session/bloc/session_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -51,6 +52,14 @@ void main() {
   test('creates a fresh ProductsBloc for every product list', () async {
     final first = getIt<ProductsBloc>();
     final second = getIt<ProductsBloc>();
+    addTearDown(() => Future.wait([first.close(), second.close()]));
+
+    expect(first, isNot(same(second)));
+  });
+
+  test('creates a fresh ProductDetailBloc for every detail page', () async {
+    final first = getIt<ProductDetailBloc>();
+    final second = getIt<ProductDetailBloc>();
     addTearDown(() => Future.wait([first.close(), second.close()]));
 
     expect(first, isNot(same(second)));

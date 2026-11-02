@@ -1,9 +1,12 @@
+import 'package:dummy_shop/domain/entities/product.dart';
 import 'package:dummy_shop/injection/injection.dart';
 import 'package:dummy_shop/presentation/app/router/app_routes.dart';
 import 'package:dummy_shop/presentation/app/router/auth_guard.dart';
 import 'package:dummy_shop/presentation/app/router/stream_listenable.dart';
 import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart';
 import 'package:dummy_shop/presentation/login/pages/login_page.dart';
+import 'package:dummy_shop/presentation/product_detail/bloc/product_detail_bloc.dart';
+import 'package:dummy_shop/presentation/product_detail/bloc/product_detail_event.dart';
 import 'package:dummy_shop/presentation/product_detail/pages/product_detail_page.dart';
 import 'package:dummy_shop/presentation/products/bloc/products_bloc.dart';
 import 'package:dummy_shop/presentation/products/bloc/products_event.dart';
@@ -56,8 +59,25 @@ class AppRouter {
               // failing in the detail page.
               redirect: (context, state) =>
                   _productId(state) == null ? AppRoutes.products : null,
-              builder: (context, state) =>
-                  ProductDetailPage(productId: _productId(state)!),
+              builder: (context, state) {
+                final productId = _productId(state)!;
+                // The list passes the tapped product as `extra`. A deep link
+                // or a restored route has none, and loads by id instead.
+                final preview = switch (state.extra) {
+                  final Product product => product,
+                  _ => null,
+                };
+                return BlocProvider(
+                  create: (_) => getIt<ProductDetailBloc>()
+                    ..add(
+                      ProductDetailEvent.loadRequested(
+                        productId,
+                        preview: preview,
+                      ),
+                    ),
+                  child: ProductDetailPage(productId: productId),
+                );
+              },
             ),
           ],
         ),

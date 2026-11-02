@@ -37,6 +37,8 @@ import 'package:dummy_shop/injection/modules/network_module.dart' as _i794;
 import 'package:dummy_shop/injection/modules/storage_module.dart' as _i918;
 import 'package:dummy_shop/presentation/app/router/app_router.dart' as _i60;
 import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart' as _i99;
+import 'package:dummy_shop/presentation/product_detail/bloc/product_detail_bloc.dart'
+    as _i7;
 import 'package:dummy_shop/presentation/products/bloc/products_bloc.dart'
     as _i33;
 import 'package:dummy_shop/presentation/session/bloc/session_bloc.dart'
@@ -126,6 +128,9 @@ extension GetItInjectableX on _i174.GetIt {
       dispose: (i) => i.close(),
     );
     gh.factory<_i99.LoginBloc>(() => _i99.LoginBloc(gh<_i760.LoginUseCase>()));
+    gh.factory<_i7.ProductDetailBloc>(
+      () => _i7.ProductDetailBloc(gh<_i430.GetProductUseCase>()),
+    );
     gh.lazySingleton<_i60.AppRouter>(
       () => _i60.AppRouter(gh<_i235.SessionBloc>()),
       dispose: (i) => i.dispose(),

@@ -75,6 +75,36 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get productDescriptionTitle => 'Description';
+
+  @override
+  String get stockIn => 'In stock';
+
+  @override
+  String stockLow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Only $count left',
+      one: 'Only 1 left',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get stockOut => 'Out of stock';
+
+  @override
+  String discountBadge(int percent) {
+    return '-$percent%';
+  }
+
+  @override
+  String galleryPosition(int current, int total) {
+    return 'Image $current of $total';
+  }
+
+  @override
   String get productDetailTitle => 'Product details';
 
   @override

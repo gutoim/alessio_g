@@ -1,6 +1,7 @@
 import 'package:dummy_shop/domain/core/result.dart';
 import 'package:dummy_shop/domain/entities/paginated_products.dart';
 import 'package:dummy_shop/domain/entities/user.dart';
+import 'package:dummy_shop/domain/use_cases/get_product_use_case.dart';
 import 'package:dummy_shop/domain/use_cases/get_products_use_case.dart';
 import 'package:dummy_shop/domain/use_cases/login_use_case.dart';
 import 'package:dummy_shop/domain/use_cases/logout_use_case.dart';
@@ -29,3 +30,5 @@ Future<Result<PaginatedProducts>> anyGetProducts(
   skip: any(named: 'skip'),
   limit: any(named: 'limit'),
 );
+
+class MockGetProductUseCase extends Mock implements GetProductUseCase {}

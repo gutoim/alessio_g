@@ -1,4 +1,5 @@
 import 'package:dummy_shop/l10n/l10n.dart';
+import 'package:dummy_shop/res/app_colors.dart';
 import 'package:dummy_shop/res/app_dimens.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class RatingLabel extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.star_rounded, size: 18, color: Colors.amber.shade700),
+          const Icon(Icons.star_rounded, size: 18, color: AppColors.rating),
           const SizedBox(width: AppSpacing.xs),
           Text(value, style: theme.textTheme.labelLarge),
         ],

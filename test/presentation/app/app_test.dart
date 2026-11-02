@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:dummy_shop/domain/core/result.dart';
 import 'package:dummy_shop/domain/entities/auth_status.dart';
+import 'package:dummy_shop/domain/entities/product.dart';
 import 'package:dummy_shop/injection/injection.dart';
 import 'package:dummy_shop/presentation/app/app.dart';
 import 'package:dummy_shop/presentation/app/router/app_router.dart';
 import 'package:dummy_shop/presentation/app/router/app_routes.dart';
 import 'package:dummy_shop/presentation/login/bloc/login_bloc.dart';
 import 'package:dummy_shop/presentation/login/pages/login_page.dart';
+import 'package:dummy_shop/presentation/product_detail/bloc/product_detail_bloc.dart';
 import 'package:dummy_shop/presentation/product_detail/pages/product_detail_page.dart';
 import 'package:dummy_shop/presentation/products/bloc/products_bloc.dart';
 import 'package:dummy_shop/presentation/products/pages/products_page.dart';
@@ -28,6 +30,7 @@ void main() {
   late MockLogoutUseCase logout;
   late MockWatchAuthStatusUseCase watchAuthStatus;
   late MockGetProductsUseCase getProducts;
+  late MockGetProductUseCase getProduct;
   late StreamController<AuthStatus> authStatus;
   late AppRouter appRouter;
 
@@ -36,6 +39,7 @@ void main() {
     logout = MockLogoutUseCase();
     watchAuthStatus = MockWatchAuthStatusUseCase();
     getProducts = MockGetProductsUseCase();
+    getProduct = MockGetProductUseCase();
 
     when(() => watchAuthStatus()).thenAnswer((_) => authStatus.stream);
     when(
@@ -50,9 +54,14 @@ void main() {
       () => anyGetProducts(getProducts),
     ).thenAnswer((_) async => Result.ok(productsPage([testProduct])));
 
+    when(
+      () => getProduct(any()),
+    ).thenAnswer((_) async => const Result.ok(testProduct));
+
     getIt
       ..registerFactory<LoginBloc>(() => LoginBloc(login))
-      ..registerFactory<ProductsBloc>(() => ProductsBloc(getProducts));
+      ..registerFactory<ProductsBloc>(() => ProductsBloc(getProducts))
+      ..registerFactory<ProductDetailBloc>(() => ProductDetailBloc(getProduct));
   });
 
   tearDown(getIt.reset);
@@ -168,6 +177,24 @@ void main() {
       find.byType(ProductDetailPage),
     );
     expect(page.productId, 42);
+  });
+
+  testWidgets('tapping a product shows its details right away', (tester) async {
+    final pendingFetch = Completer<Result<Product>>();
+    when(() => getProduct(1)).thenAnswer((_) => pendingFetch.future);
+    await pumpApp(tester);
+    await givenStatus(tester, AuthStatus.authenticated);
+
+    await tester.tap(find.text('Essence Mascara Lash Princess'));
+    await tester.pumpAndSettle();
+
+    // Shown from the list's data while the fresh copy is still loading.
+    expect(find.byType(ProductDetailPage), findsOneWidget);
+    expect(find.text('Description'), findsOneWidget);
+    verify(() => getProduct(1)).called(1);
+
+    pendingFetch.complete(const Result.ok(testProduct));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('a non-numeric product id redirects to the products list', (

@@ -90,7 +90,9 @@ class _ProductListState extends State<ProductList> {
         final product = products[index];
         return ProductTile(
           product: product,
-          onTap: () => context.go(AppRoutes.productDetail(product.id)),
+          // The product goes along so the detail page can show it at once.
+          onTap: () =>
+              context.go(AppRoutes.productDetail(product.id), extra: product),
         );
       },
     );

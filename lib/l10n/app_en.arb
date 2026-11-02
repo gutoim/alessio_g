@@ -82,6 +82,40 @@
       "rating": {"type": "String", "example": "4.5"}
     }
   },
+  "productDescriptionTitle": "Description",
+  "@productDescriptionTitle": {
+    "description": "Heading above the product description."
+  },
+  "stockIn": "In stock",
+  "@stockIn": {
+    "description": "Stock status of an available product."
+  },
+  "stockLow": "{count, plural, =1{Only 1 left} other{Only {count} left}}",
+  "@stockLow": {
+    "description": "Stock status when few items remain.",
+    "placeholders": {
+      "count": {"type": "int", "example": "3"}
+    }
+  },
+  "stockOut": "Out of stock",
+  "@stockOut": {
+    "description": "Stock status of a product that can't be bought."
+  },
+  "discountBadge": "-{percent}%",
+  "@discountBadge": {
+    "description": "Badge with the discount, rounded to a whole percent.",
+    "placeholders": {
+      "percent": {"type": "int", "example": "10"}
+    }
+  },
+  "galleryPosition": "Image {current} of {total}",
+  "@galleryPosition": {
+    "description": "Screen reader text for the gallery page indicator.",
+    "placeholders": {
+      "current": {"type": "int", "example": "1"},
+      "total": {"type": "int", "example": "3"}
+    }
+  },
   "productDetailTitle": "Product details",
   "@productDetailTitle": {
     "description": "App bar title of the product detail screen."

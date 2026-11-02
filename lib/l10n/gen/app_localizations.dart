@@ -202,6 +202,42 @@ abstract class AppLocalizations {
   /// **'Rated {rating} out of 5'**
   String ratingLabel(String rating);
 
+  /// Heading above the product description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get productDescriptionTitle;
+
+  /// Stock status of an available product.
+  ///
+  /// In en, this message translates to:
+  /// **'In stock'**
+  String get stockIn;
+
+  /// Stock status when few items remain.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Only 1 left} other{Only {count} left}}'**
+  String stockLow(int count);
+
+  /// Stock status of a product that can't be bought.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of stock'**
+  String get stockOut;
+
+  /// Badge with the discount, rounded to a whole percent.
+  ///
+  /// In en, this message translates to:
+  /// **'-{percent}%'**
+  String discountBadge(int percent);
+
+  /// Screen reader text for the gallery page indicator.
+  ///
+  /// In en, this message translates to:
+  /// **'Image {current} of {total}'**
+  String galleryPosition(int current, int total);
+
   /// App bar title of the product detail screen.
   ///
   /// In en, this message translates to:
